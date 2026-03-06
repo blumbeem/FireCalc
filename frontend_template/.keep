@@ -1,0 +1,7 @@
+import { MonthlyDataPoint, FireMetrics } from "@/types/firecalc";
+
+interface Props {
+    data: MonthlyDataPoint[];
+    metrics: FireMetrics;
+    targetAge: number;
+}

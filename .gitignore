@@ -1,0 +1,21 @@
+# Environments
+.env
+
+# Virtual Environments
+venv/
+env/
+.env/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dependencies
+install_requirements.sh
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
