@@ -82,6 +82,8 @@ export default function FireCalcForm({
     isMonthly,
     setIsMonthly
 }: Props) {
+    const [isFormOpen, setIsFormOpen] = useState(true);
+    const [isFormLocked, setIsFormLocked] = useState(true);
 
     const handleBaseChange = (field: keyof BaseFireInput, value: number | string) => {
         setBaseInput(prev => ({ ...prev, [field]: value }));
@@ -104,12 +106,31 @@ export default function FireCalcForm({
     const dynSuffix = isMonthly ? "/mo" : "/yr";
     const dynMult = isMonthly ? 1 : 12;
 
+    if (!isFormOpen) {
+        return (
+            <div className={`z-50 ${isFormLocked ? 'relative' : 'absolute top-0 left-0'}`}>
+                <button
+                    onClick={() => setIsFormOpen(true)}
+                    className="flex items-center gap-3 bg-slate-800/90 backdrop-blur-md hover:bg-slate-700 text-white rounded-xl px-5 py-3 shadow-xl transition-all border border-slate-600 hover:border-cyan-500 group"
+                >
+                    <svg className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                    <span className="font-semibold text-sm">Expand Parameters</span>
+                </button>
+            </div>
+        );
+    }
+
     return (
-        <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700 rounded-2xl p-6 shadow-2xl w-full">
+        <div className={`rounded-2xl p-6 w-full transition-all duration-300 ${isFormLocked ? 'bg-slate-800/50 backdrop-blur-md border border-slate-700 shadow-2xl relative' : 'bg-slate-800/95 backdrop-blur-3xl border border-cyan-500/50 absolute top-0 left-0 z-50 shadow-[0_20px_50px_rgba(8,_112,_184,_0.2)]'}`}>
 
             {/* Scope Toggles & Type Selector header row */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 border-b border-slate-700 pb-4">
-                <h2 className="text-2xl font-bold text-white shrink-0">Simulation Parameters</h2>
+                <div className="flex items-center gap-3">
+                    <button onClick={() => setIsFormOpen(false)} className="bg-slate-700 hover:bg-slate-600 text-white rounded-lg p-2 transition-colors border border-slate-600" title="Minimize Parameters">
+                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 12H4" /></svg>
+                    </button>
+                    <h2 className="text-2xl font-bold text-white shrink-0">Simulation Parameters</h2>
+                </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
                     {/* Type Selector */}
@@ -129,9 +150,24 @@ export default function FireCalcForm({
                     </div>
 
                     {/* Monthly Toggle */}
-                    <div className="flex bg-slate-900 rounded-xl p-1 border border-slate-700 w-full sm:w-auto shrink-0">
+                    <div className="flex bg-slate-900 rounded-xl p-1 border border-slate-700 shrink-0">
                         <button onClick={() => setIsMonthly(true)} className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors ${isMonthly ? 'bg-cyan-500 text-slate-900' : 'text-slate-400 hover:text-white'}`}>Monthly</button>
                         <button onClick={() => setIsMonthly(false)} className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors ${!isMonthly ? 'bg-cyan-500 text-slate-900' : 'text-slate-400 hover:text-white'}`}>Annually</button>
+                    </div>
+
+                    {/* Floating Lock Toggle */}
+                    <div className="flex bg-slate-900 rounded-xl p-1 border border-slate-700 shrink-0">
+                        <button
+                            onClick={() => setIsFormLocked(!isFormLocked)}
+                            className={`flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-colors ${isFormLocked ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                            title={isFormLocked ? "Unlock to float over chart" : "Lock to push chart down"}
+                        >
+                            {isFormLocked ? (
+                                <><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></> Locked</>
+                            ) : (
+                                <><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" /></> Floating</>
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>

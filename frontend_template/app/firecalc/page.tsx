@@ -133,7 +133,7 @@ export default function FireCalcPage() {
                     </p>
                 </header>
 
-                <div className="flex flex-col gap-6 lg:gap-10">
+                <div className="relative flex flex-col gap-6 lg:gap-10">
 
                     {/* Form row horizontally spans 100% */}
                     <div className="w-full shrink-0">
