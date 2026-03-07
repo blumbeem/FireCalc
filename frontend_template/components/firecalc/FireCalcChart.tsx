@@ -11,7 +11,8 @@ import {
     ResponsiveContainer,
     ReferenceLine,
     Line,
-    ComposedChart
+    ComposedChart,
+    Legend
 } from "recharts";
 
 interface Props {
@@ -64,6 +65,17 @@ const CustomTooltip = ({ active, payload, label, targetAge }: any) => {
     return null;
 };
 
+// Custom Legend to only show the relevant bands
+const renderLegend = (props: any) => {
+    return (
+        <div className="flex flex-wrap justify-center gap-6 text-xs text-slate-400 mt-4">
+            <div className="flex items-center gap-2"><span className="w-4 h-[2px] border-t border-dashed border-slate-400"></span> 90th & 10th Percentile (Variance)</div>
+            <div className="flex items-center gap-2"><span className="w-4 h-[2px] bg-slate-100"></span> 50th Percentile (Median Path)</div>
+            <div className="flex items-center gap-2"><span className="w-4 h-[2px] border-t border-dashed border-amber-400"></span> FIRE Target</div>
+        </div>
+    );
+};
+
 export default function FireCalcChart({ data, metrics, targetAge }: Props) {
     const formatYAxis = (tickItem: number) => {
         if (tickItem >= 1000000) {
@@ -76,7 +88,7 @@ export default function FireCalcChart({ data, metrics, targetAge }: Props) {
     };
 
     return (
-        <div className="w-full h-[600px] bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-2xl">
+        <div className="w-full h-[650px] bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-2xl">
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold text-white">Financial Independence Projection</h3>
                 <span className="text-xs text-slate-500 font-mono">1,000 Monte Carlo Simulations</span>
@@ -84,7 +96,7 @@ export default function FireCalcChart({ data, metrics, targetAge }: Props) {
             <ResponsiveContainer width="100%" height="90%">
                 <ComposedChart
                     data={data}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 >
                     <defs>
                         <linearGradient id="colorCash" x1="0" y1="0" x2="0" y2="1">
@@ -118,6 +130,7 @@ export default function FireCalcChart({ data, metrics, targetAge }: Props) {
                         domain={[0, 'auto']}
                     />
                     <Tooltip content={<CustomTooltip targetAge={targetAge} />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1, strokeDasharray: '4 4' }} />
+                    <Legend content={renderLegend} verticalAlign="bottom" height={36} />
 
                     <Area
                         type="monotone"

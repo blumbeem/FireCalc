@@ -153,7 +153,7 @@ export default function FireCalcPage() {
                         />
                     </div>
 
-                    <div className="w-full xl:flex-1 flex flex-col">
+                    <div className="w-full flex-1 flex flex-col">
                         {response ? (
                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 h-full flex flex-col">
                                 <FireCalcResults metrics={response.metrics} />
