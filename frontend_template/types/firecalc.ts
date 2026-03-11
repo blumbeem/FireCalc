@@ -19,10 +19,19 @@ export interface RatesAndAssumptions {
 export interface BaseFireInput {
     simulation_type: 'monte_carlo' | 'historical';
     current_age: number;
+    simulation_end_age: number;
     w2_income: number;
     current_extra_income: number;
     monthly_expenses: number;
     expected_retirement_monthly_expenses: number;
+    essential_retirement_expenses: number;
+    monthly_retirement_contribution: number;
+    allow_early_withdrawal: boolean;
+    roth_fraction: number;
+    retirement_withdrawal_tax_rate: number;
+    ss_monthly_benefit: number;
+    ss_start_age: number;
+    dynamic_withdrawal: boolean;
     assets: AssetBalances;
     rates: RatesAndAssumptions;
 }
