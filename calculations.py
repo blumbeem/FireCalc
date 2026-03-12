@@ -78,9 +78,9 @@ def run_simulation(req, target_fire_number, get_surplus_and_shortfall_fn):
         Brokerage=req.assets.taxable_bal,
         Retirement=req.assets.retirement_bal,
         NetWorth=starting_liquid + req.assets.other_assets + req.assets.re_value,
-        NetWorth_10th=starting_liquid + req.assets.other_assets + req.assets.re_value,
-        NetWorth_50th=starting_liquid + req.assets.other_assets + req.assets.re_value,
-        NetWorth_90th=starting_liquid + req.assets.other_assets + req.assets.re_value
+        NetWorth_10th=starting_liquid,
+        NetWorth_50th=starting_liquid,
+        NetWorth_90th=starting_liquid
     )]
 
     for y in range(years_to_run):
@@ -181,7 +181,8 @@ def run_simulation(req, target_fire_number, get_surplus_and_shortfall_fn):
         cash_paths = np.maximum(0, cash_paths)
 
         ret_total     = roth_paths + trad_paths
-        total_nw_arr  = tax_paths + ret_total + cash_paths + req.assets.other_assets + req.assets.re_value
+        liquid_nw_arr = tax_paths + ret_total + cash_paths
+        total_nw_arr  = liquid_nw_arr + req.assets.other_assets + req.assets.re_value
 
         mc_data.append(YearlyDataPoint(
             Age=current_age,
@@ -189,9 +190,9 @@ def run_simulation(req, target_fire_number, get_surplus_and_shortfall_fn):
             Brokerage=float(np.median(tax_paths)),
             Retirement=float(np.median(ret_total)),
             NetWorth=float(np.median(total_nw_arr)),
-            NetWorth_10th=float(np.percentile(total_nw_arr, 10)),
-            NetWorth_50th=float(np.median(total_nw_arr)),
-            NetWorth_90th=float(np.percentile(total_nw_arr, 90))
+            NetWorth_10th=float(np.percentile(liquid_nw_arr, 10)),
+            NetWorth_50th=float(np.median(liquid_nw_arr)),
+            NetWorth_90th=float(np.percentile(liquid_nw_arr, 90))
         ))
 
     # Expected FIRE Age: median of paths that successfully reached the target
